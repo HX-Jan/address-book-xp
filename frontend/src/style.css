@@ -1,0 +1,98 @@
+:root {
+  font-family: "Microsoft YaHei UI", "PingFang SC", system-ui, sans-serif;
+  color: #182622;
+  background: #f1f5f2;
+  font-synthesis: none;
+}
+
+body {
+  margin: 0;
+}
+
+.address-book {
+  box-sizing: border-box;
+  width: min(100%, 48rem);
+  margin-inline: auto;
+  padding: clamp(3rem, 10vw, 6rem) clamp(1.25rem, 5vw, 2rem);
+}
+
+.book-header {
+  border-inline-start: 4px solid #27745d;
+  padding-inline-start: 1rem;
+  margin-block-end: 1.75rem;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(2rem, 6vw, 3rem);
+  line-height: 1.25;
+  letter-spacing: -0.04em;
+}
+
+.contact-panel {
+  background: #fff;
+  border: 1px solid #d4e0da;
+  border-radius: 0.75rem;
+  overflow: hidden;
+}
+
+.panel-state {
+  box-sizing: border-box;
+  display: grid;
+  min-height: 13rem;
+  align-content: center;
+  justify-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  color: #465951;
+  text-align: center;
+}
+
+.panel-state--summary {
+  min-height: auto;
+  justify-items: start;
+  padding: 0.875rem 1.25rem;
+  background: #f8faf9;
+  border-top: 1px solid #d4e0da;
+  font-size: 0.875rem;
+}
+
+.status {
+  margin: 0;
+  line-height: 1.65;
+}
+
+.contact-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.contact-list > li {
+  padding: 1rem 1.25rem;
+  overflow-wrap: anywhere;
+}
+
+.contact-list > li + li {
+  border-top: 1px solid #d4e0da;
+}
+
+.retry {
+  min-height: 2.75rem;
+  padding: 0.5rem 1.15rem;
+  color: #fff;
+  background: #20634f;
+  border: 0;
+  border-radius: 0.375rem;
+  font: inherit;
+  cursor: pointer;
+}
+
+.retry:hover {
+  background: #184b3c;
+}
+
+.retry:focus-visible {
+  outline: 2px solid #184b3c;
+  outline-offset: 3px;
+}

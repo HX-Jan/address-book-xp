@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>通讯录</title>
+    <link rel="icon" href="data:," />
+  </head>
+  <body>
+    <main class="address-book" aria-labelledby="page-title">
+      <header class="book-header">
+        <h1 id="page-title">通讯录</h1>
+      </header>
+      <section class="contact-panel" aria-label="联系人" aria-busy="true">
+        <ul class="contact-list" aria-label="联系人列表" hidden></ul>
+        <div class="panel-state">
+          <p class="status" role="status">正在加载联系人…</p>
+          <button class="retry" type="button" hidden>重试</button>
+        </div>
+      </section>
+    </main>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
