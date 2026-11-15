@@ -6,9 +6,15 @@
     "node": "24.x"
   },
   "workspaces": ["frontend", "backend"],
+  "overrides": {
+    "exceljs": {
+      "uuid": "11.1.1"
+    }
+  },
   "scripts": {
     "dev:frontend": "npm run dev --workspace frontend",
     "dev:backend": "npm run dev --workspace backend",
+    "migrate:contacts": "node backend/src/migrate-contacts.js",
     "build": "npm run build --workspace frontend"
   }
 }

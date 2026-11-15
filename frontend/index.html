@@ -3,22 +3,207 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#faf9f6" />
     <title>通讯录</title>
     <link rel="icon" href="data:," />
   </head>
   <body>
-    <main class="address-book" aria-labelledby="page-title">
-      <header class="book-header">
-        <h1 id="page-title">通讯录</h1>
+    <div class="session-state" id="session-state">
+      <p id="session-message" role="status">正在连接…</p>
+      <button type="button" class="button secondary" id="session-retry" hidden>重试</button>
+    </div>
+
+    <main class="auth-screen" id="auth-screen" hidden>
+      <div class="auth-panel">
+        <h1>通讯录</h1>
+        <nav class="views auth-views" aria-label="账号">
+          <button type="button" class="view-button" data-auth-mode="login" aria-pressed="true">登录</button>
+          <button type="button" class="view-button" data-auth-mode="register" aria-pressed="false">注册</button>
+        </nav>
+        <form id="auth-form" class="auth-form">
+          <label class="field">
+            <span class="field-label">用户名</span>
+            <input id="auth-username" name="username" autocomplete="username" maxlength="24" required />
+          </label>
+          <label class="field">
+            <span class="field-label">密码</span>
+            <input id="auth-password" name="password" type="password" autocomplete="current-password" maxlength="128" required />
+          </label>
+          <label class="field" id="auth-confirm-field" hidden>
+            <span class="field-label">确认密码</span>
+            <input id="auth-confirm" type="password" autocomplete="new-password" maxlength="128" disabled />
+          </label>
+          <p class="form-error" id="auth-error" role="alert" hidden></p>
+          <button type="submit" class="button primary" id="auth-submit">登录</button>
+        </form>
+      </div>
+    </main>
+
+    <main class="workspace" id="workspace" hidden>
+      <header class="masthead">
+        <h1>通讯录</h1>
+        <div class="file-actions">
+          <button type="button" class="button plain file-button" id="import" aria-label="导入 Excel" title="导入 Excel">
+            <span data-icon="upload"></span><span class="file-label">导入 Excel</span>
+          </button>
+          <button type="button" class="button plain file-button" id="export" aria-label="导出 Excel" title="导出 Excel">
+            <span data-icon="download"></span><span class="file-label">导出 Excel</span>
+          </button>
+          <button type="button" class="button primary" id="new-contact" aria-label="新建联系人">
+            <span data-icon="plus"></span><span>新建</span>
+          </button>
+          <details class="account-menu" id="account-menu">
+            <summary class="icon-button plain" aria-label="账号" title="账号"><span data-icon="account"></span></summary>
+            <div class="account-popover">
+              <p id="account-name"></p>
+              <button type="button" class="button plain" id="logout">退出登录</button>
+              <p class="form-error" id="logout-error" role="alert" hidden></p>
+            </div>
+          </details>
+          <input id="workbook" type="file" accept=".xlsx" hidden />
+        </div>
       </header>
-      <section class="contact-panel" aria-label="联系人" aria-busy="true">
-        <ul class="contact-list" aria-label="联系人列表" hidden></ul>
-        <div class="panel-state">
-          <p class="status" role="status">正在加载联系人…</p>
-          <button class="retry" type="button" hidden>重试</button>
+
+      <section class="directory" aria-label="联系人">
+        <header class="directory-toolbar">
+          <nav class="views" aria-label="联系人列表">
+            <button type="button" class="view-button" data-view="all" aria-pressed="true">
+              <span>所有联系人</span><span class="view-count" id="all-count"></span>
+            </button>
+            <button type="button" class="view-button" data-view="favorites" aria-pressed="false">
+              <span>收藏</span><span class="view-count" id="favorite-count"></span>
+            </button>
+          </nav>
+          <div class="filter-controls">
+            <select id="group-filter" aria-label="分组">
+              <option value="">全部分组</option>
+              <option value="manage">管理分组…</option>
+            </select>
+            <label class="search">
+              <span data-icon="search"></span>
+              <input id="search" type="search" placeholder="搜索联系人" aria-label="搜索联系人" />
+            </label>
+          </div>
+        </header>
+        <div class="column-head" aria-hidden="true" id="column-head" hidden>
+          <span>姓名</span><span class="column-phone">电话</span><span class="column-email">邮箱</span>
+        </div>
+        <ul class="contact-list" aria-label="联系人" id="contact-list" hidden></ul>
+        <div class="list-state" id="list-state">
+          <p role="status" id="list-status">正在载入…</p>
+          <button type="button" class="button secondary" id="retry" hidden>重试</button>
         </div>
       </section>
+
     </main>
+
+    <dialog class="details" id="details" aria-labelledby="contact-name">
+      <div class="detail-toolbar">
+        <button type="button" class="icon-button plain" id="close-details" aria-label="关闭详情" autofocus><span data-icon="close"></span></button>
+        <div class="contact-actions">
+          <button type="button" class="icon-button" id="favorite" aria-label="收藏联系人" title="收藏联系人" aria-pressed="false"><span data-icon="star"></span></button>
+          <button type="button" class="button secondary" id="edit"><span data-icon="edit"></span>编辑</button>
+        </div>
+      </div>
+      <h2 id="contact-name"></h2>
+      <div class="method-details" id="method-details"></div>
+      <p class="detail-status" id="detail-copy-status" role="status"></p>
+      <div class="detail-groups">
+        <div><h3>分组</h3><p id="contact-groups"></p></div>
+        <button type="button" class="button secondary" id="edit-groups" aria-haspopup="dialog">编辑分组</button>
+      </div>
+      <p class="form-error detail-error" id="detail-error" role="alert" hidden></p>
+      <div class="detail-footer"><button type="button" class="button plain delete" id="delete"><span data-icon="trash"></span>删除联系人</button></div>
+    </dialog>
+
+    <div id="feedback" class="feedback" role="status" hidden></div>
+
+    <dialog id="editor" aria-labelledby="editor-title">
+      <form id="contact-form" class="dialog-body">
+        <header class="dialog-header"><h2 id="editor-title"></h2><button type="button" class="icon-button" data-close aria-label="关闭"><span data-icon="close"></span></button></header>
+        <div class="editor-fields">
+          <label class="field"><span class="field-label">姓名</span><input id="name" maxlength="80" required autofocus autocomplete="off" /></label>
+          <fieldset class="contact-basics" id="new-contact-fields" hidden disabled>
+            <label class="field">
+              <span class="field-label">电话</span>
+              <input id="phone" type="tel" autocomplete="tel" maxlength="300" pattern=".*\S.*" required />
+            </label>
+          </fieldset>
+          <fieldset class="method-editor">
+            <legend id="edit-methods-label" hidden>联系方式</legend>
+            <div id="method-fields"></div>
+            <button type="button" class="button plain add-method" id="add-method"><span data-icon="plus"></span>添加联系方式</button>
+          </fieldset>
+          <p id="form-error" role="alert" class="form-error" hidden></p>
+        </div>
+        <footer class="dialog-footer"><button type="button" class="button secondary" data-close>取消</button><button type="submit" class="button primary" id="save">保存</button></footer>
+      </form>
+    </dialog>
+
+    <dialog class="method-picker" id="method-picker" aria-labelledby="method-picker-title">
+      <header class="dialog-header">
+        <h2 id="method-picker-title">添加联系方式</h2>
+        <button type="button" class="icon-button" data-close aria-label="关闭"><span data-icon="close"></span></button>
+      </header>
+      <div class="method-options">
+        <button type="button" data-method-type="email" autofocus>邮箱<span data-icon="forward"></span></button>
+        <button type="button" data-method-type="phone">其他电话<span data-icon="forward"></span></button>
+        <button type="button" data-method-type="social">社交账号<span data-icon="forward"></span></button>
+        <button type="button" data-method-type="address">地址<span data-icon="forward"></span></button>
+      </div>
+    </dialog>
+
+    <dialog id="delete-dialog" aria-labelledby="delete-title">
+      <div class="dialog-body">
+        <header class="dialog-header"><h2 id="delete-title">删除联系人</h2></header>
+        <p id="delete-message"></p>
+        <p class="form-error" id="delete-error" role="alert" hidden></p>
+        <footer class="dialog-footer"><button type="button" class="button secondary" data-close autofocus>取消</button><button type="button" class="button danger" id="confirm-delete">删除</button></footer>
+      </div>
+    </dialog>
+
+    <dialog id="group-manager" aria-labelledby="group-manager-title">
+      <div class="dialog-body">
+        <header class="dialog-header">
+          <h2 id="group-manager-title">管理分组</h2>
+          <button type="button" class="icon-button" data-close aria-label="关闭"><span data-icon="close"></span></button>
+        </header>
+        <ul class="group-list" id="group-list" aria-label="已有分组" hidden></ul>
+        <form id="group-form">
+          <label class="field"><span class="field-label">分组名称</span><input id="group-name" required autofocus /></label>
+          <p class="form-error" id="group-error" role="alert" hidden></p>
+          <footer class="dialog-footer">
+            <button type="button" class="button secondary" id="cancel-rename" hidden>取消重命名</button>
+            <button type="submit" class="button primary" id="save-group">新建分组</button>
+          </footer>
+        </form>
+      </div>
+    </dialog>
+
+    <dialog id="group-membership" aria-labelledby="group-membership-title">
+      <form class="dialog-body" id="group-membership-form">
+        <header class="dialog-header"><h2 id="group-membership-title">编辑分组</h2></header>
+        <div class="group-choices" id="group-choices"></div>
+        <p class="form-error" id="group-membership-error" role="alert" hidden></p>
+        <footer class="dialog-footer">
+          <button type="button" class="button secondary" data-close>取消</button>
+          <button type="submit" class="button primary" id="save-membership">保存</button>
+        </footer>
+      </form>
+    </dialog>
+
+    <dialog id="group-delete" aria-labelledby="group-delete-title">
+      <div class="dialog-body">
+        <header class="dialog-header"><h2 id="group-delete-title">删除分组</h2></header>
+        <p id="group-delete-message"></p>
+        <p class="form-error" id="group-delete-error" role="alert" hidden></p>
+        <footer class="dialog-footer">
+          <button type="button" class="button secondary" data-close autofocus>取消</button>
+          <button type="button" class="button danger" id="confirm-group-delete">删除</button>
+        </footer>
+      </div>
+    </dialog>
+
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>
