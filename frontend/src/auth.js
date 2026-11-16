@@ -1,4 +1,4 @@
-import { api, setActiveAccount } from './api.js';
+import { api, configureSession } from './api.js';
 
 const $ = (id) => document.getElementById(id);
 
@@ -34,10 +34,11 @@ export function startSession(onSignIn) {
     $('session-message').textContent = '正在连接…';
     $('session-retry').hidden = true;
     try {
-      const { user } = await api.session();
+      const session = await api.session();
+      const { user } = session;
+      configureSession(session);
       $('session-state').hidden = true;
       if (user) {
-        setActiveAccount(user.id);
         $('account-name').textContent = user.username;
         workspace.hidden = false;
         onSignIn();
