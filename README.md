@@ -24,9 +24,9 @@ npm run dev:frontend
 
 运行 `npm run build` 将生成 `frontend/dist/` 下的静态文件。部署时需把同源的 `/api` 请求转发给后端。
 
-## Cloudflare 公网后端
+## Cloudflare 公网版
 
-参阅 [Cloudflare 手动部署指南](cloudflare/DEPLOY.md)。公网后端使用独立的 Worker 和 D1 数据库，提供 HTTPS API。部署后的页面联调需要已接入 Worker 会话协议的前端，并通过同源路径访问 `/api`。
+打开 [公网通讯录](https://address-book-xp-api.assignment1.workers.dev/)。前端页面和 `/api` 通过同一个 Worker 和 HTTPS 域名发布，账号和通讯录存入 D1。重新发布请参阅 [Cloudflare 手动部署指南](cloudflare/DEPLOY.md)。
 
 ## 账号与旧数据
 
