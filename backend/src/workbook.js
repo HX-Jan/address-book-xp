@@ -1,5 +1,5 @@
 import ExcelJS from 'exceljs';
-import { ContactError, methodLabels, readContact } from './contacts.js';
+import { ContactError, methodLabels, readContact } from './contact-domain.js';
 
 export const workbookType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 const methodTypes = Object.keys(methodLabels);
@@ -33,7 +33,7 @@ export async function exportWorkbook(contacts) {
     sheet.addRow([contact.name, contact.favorite ? '是' : '否', ...methods]);
   }
 
-  return Buffer.from(await workbook.xlsx.writeBuffer());
+  return await workbook.xlsx.writeBuffer();
 }
 
 function readCell(row, column) {
@@ -50,7 +50,9 @@ function readCell(row, column) {
 export async function readWorkbook(buffer) {
   const workbook = new ExcelJS.Workbook();
   try {
-    if (!Buffer.isBuffer(buffer) || buffer.length === 0) throw new Error('Empty upload');
+    if (!(buffer instanceof ArrayBuffer || ArrayBuffer.isView(buffer)) || buffer.byteLength === 0) {
+      throw new Error('Empty upload');
+    }
     await workbook.xlsx.load(buffer);
   } catch {
     throw new ContactError('无法读取此文件，请选择有效的 .xlsx 表格。');
