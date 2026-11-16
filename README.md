@@ -24,6 +24,10 @@ npm run dev:frontend
 
 运行 `npm run build` 将生成 `frontend/dist/` 下的静态文件。部署时需把同源的 `/api` 请求转发给后端。
 
+## Cloudflare 公网后端
+
+参阅 [Cloudflare 手动部署指南](cloudflare/DEPLOY.md)。公网后端使用独立的 Worker 和 D1 数据库，提供 HTTPS API。部署后的页面联调需要已接入 Worker 会话协议的前端，并通过同源路径访问 `/api`。
+
 ## 账号与旧数据
 
 首次使用点击「注册」，填写用户名和密码。注册成功后会登录，右上角的账号菜单可退出。密码经 scrypt 加盐派生后保存，登录使用服务端会话和 HttpOnly Cookie。账号数据位于 `backend/data/accounts.json`，各通讯录位于 `backend/data/books/`。
@@ -46,7 +50,7 @@ npm run migrate:contacts -- 你的用户名
 
 导入读取 `.xlsx` 文件中的第一张工作表。文件最大 5 MB，表格最多 5,000 位联系人。导入会追加联系人并跳过姓名及联系方式完全相同的条目。有无效数据时会提示对应行号。含公式的单元格请先转换为值。分组关系保存在应用数据中。
 
-## API
+## 本地 Express API
 
 | 请求 | 成功响应（HTTP 200） |
 | --- | --- |
