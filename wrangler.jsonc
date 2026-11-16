@@ -1,0 +1,21 @@
+{
+  "name": "address-book-xp",
+  "main": "cloudflare/worker.js",
+  "compatibility_date": "2026-11-15",
+  "previews": {
+    "d1_databases": [
+      {
+        "binding": "DB",
+        "database_name": "address-book-xp-preview",
+        "database_id": "0a0ef82a-ceb2-49bd-b363-e341605d2edb"
+      }
+    ],
+    "ratelimits": [
+      {
+        "name": "AUTH_RATE_LIMIT",
+        "namespace_id": "168251674",
+        "simple": { "limit": 30, "period": 60 }
+      }
+    ]
+  }
+}
