@@ -1,4 +1,5 @@
 import express from 'express';
+import { fileURLToPath } from 'node:url';
 import { authRouter, requireAccount } from './auth.js';
 import {
   addContact, changeContact, ContactError, deleteGroup, importContacts,
@@ -11,6 +12,9 @@ const host = '127.0.0.1';
 const port = Number(process.env.PORT || 3000);
 
 app.disable('x-powered-by');
+if (process.env.ADDRESS_BOOK_TRUST_LOOPBACK_PROXY === '1') {
+  app.set('trust proxy', 'loopback');
+}
 app.use('/api', (request, response, next) => {
   response.set('Cache-Control', 'no-store');
   const origin = request.get('origin');
@@ -87,6 +91,11 @@ app.delete('/api/groups/:id', (request, response) => {
   deleteGroup(response.locals.bookFile, request.params.id);
   response.sendStatus(204);
 });
+
+if (process.env.ADDRESS_BOOK_SERVE_FRONTEND === '1') {
+  app.use(express.static(fileURLToPath(new URL('../../frontend/dist/', import.meta.url))));
+}
+
 app.use((error, _request, response, _next) => {
   if (error instanceof ContactError) {
     return response.status(error.status).json({ error: error.message });
