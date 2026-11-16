@@ -75,6 +75,9 @@ npm run migrate:contacts -- 你的用户名
 
 ## 协作
 
-前端代码位于 `frontend/`，后端代码位于 `backend/`。每位成员用自己的 GitHub 账号提交实际完成的修改。成员从 `main` 拉取最新版本，创建功能分支，再通过 PR 互相检查和合并。提交前按本页步骤确认受影响的功能可以运行，并遵循[项目代码规范](CODE_STYLE.md)。
+- [HX-Jan](https://github.com/HX-Jan) 负责后端和部署，包括账号认证、联系人及分组 API、账号数据隔离、D1 数据库迁移，以及 Cloudflare 公网发布。
+- [Huang-QW](https://github.com/Huang-QW) 负责前端，包括登录注册和通讯录页面的交互、联系人表单、前端与后端接口联调，以及浏览器中的 Excel 导入导出。
+
+两位成员使用各自的 GitHub 账号提交 PR，互相检查后合并。提交前验证受影响的功能，并遵循[项目代码规范](CODE_STYLE.md)。
 
 [课程作业原帖](https://bbs.csdn.net/topics/620593436)
