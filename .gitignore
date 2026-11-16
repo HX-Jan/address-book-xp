@@ -6,3 +6,5 @@ dist/
 output/playwright/
 .playwright-cli/
 backend/data/
+.wrangler/
+cloudflare/wrangler.production.jsonc
